@@ -82,10 +82,8 @@ This policy allows images, scripts, AJAX, and CSS from the same origin, and does
 default-src 'none'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self';
 ```
 
-## CSP 1.0 breaks inline script and onClick handlers
-**A Common 'Gotcha'**: To prevent script injection, you can't execute any code in the page. That means *onClick* handlers in HTML elements and inline code are banned when CSP is in effect. The current best-practice recommendation is to use event listeners and have all code in a separate file. If you're doing that, you'll be fine. But if you have older pages or have been falling back on old habits, you'll need to clean up your HTML before you implement CSP or you could end up with unexpected failures.
-
-For compatibility, if you implement CSP at the server level, it will disable or break inline JavaScript code and `onClick` handlers. While those are not current best practice, they do appear more often in older webpages. For best performance, or to workaround these errors, load all JavaScript from external files, importing them with `<script src="[name of file]">` elements and replace all `onClick` handlers in your HTML with [`addEventListener`](https://msdn.microsoft.com/library/ff975245(v=vs.85).aspx) for handling clicks in your JavaScript code.
+## Inline script and onclick handlers
+Unless explicitly whitelisted via nonce or hash (or the entire blocking mechanism is disabled via the `unsafe-inline` source value), inline code and `onclick` handlers are blocked from running when CSP is in effect.  Whenever possible, its best to use event listeners and maintain script in a separate file from markup. For more on whitelisting inline code, see Mozilla Security Blog, [CSP for the web we have](https://blog.mozilla.org/security/2014/10/04/csp-for-the-web-we-have/). 
 
 ## CSP error codes and reporting blocked resources
 
