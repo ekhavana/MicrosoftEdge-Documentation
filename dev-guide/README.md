@@ -1,3 +1,4 @@
+
 # Microsoft Edge Developer Guide
 This guide provides an overview of the developer features and standards included in Microsoft Edge.
 
@@ -43,4 +44,5 @@ Sites already using CSP 1 should continue to work with Microsoft Edge support fo
 
 ## Previous EdgeHTML releases
 [EdgeHTML 13 / Windows build 14393 (11/2015)](https://blogs.windows.com/msedgedev/2015/11/16/introducing-edgehtml-13-our-first-platform-update-for-microsoft-edge/#TuusgqsWj8X6pDcD.97)
+
 [EdgeHTML 14 / Windows build 10240 (7/2016)](https://blogs.windows.com/msedgedev/2016/08/04/introducing-edgehtml-14/#6xVDezg4bfyDyIWJ.97)
