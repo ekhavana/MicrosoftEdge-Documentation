@@ -6,15 +6,15 @@ As of the MM/YYYY [Windows Creators Update](), Microsoft Edge supports [Content 
 The CSP security standard enables web developers to control the resources (script, CSS, plugins, images, etc.) which a particular page can fetch or execute with the aim of preventing cross-site scripting (XSS), clickjacking, and other code injection attacks seeking to execute malicious content in the context of a trusted web page. With CSP, web developers can create an allow list of sources of trusted content in the HTTP headers, pre-approving certain servers for content loaded into a webpage and instructing the browser to only execute or render resources from those sources.
 
 ## Changes between CSP Level 1 and Level 2
-Sites already using CSP 1 should continue to work with Microsoft Edge support for CSP 2, however be aware that the  `child-src` directive has been introduced to supplant `frame-src`. CSP 2 also adds the following:
+Sites already using CSP 1 should continue to work with Microsoft Edge support for CSP 2, however it's best to switch any `frame-src` directives that load worker scripts to the new `child-src` directive to future-proof your site. (In CSP 3, `frame-src` will no longer apply to workers.) CSP 2 also adds the following:
 
 1. New directives: `base-uri`, `child-src`, `form-action`, `frame-ancestors` and `plugin-types`. See table below for more details.
 
 2. Workers support: Background worker scripts are governed by their own policy, separate from the policy of the document loading them. As with host documents, you can set the CSP for a worker in the response header. Also new in CSP 2 is that the `allow-scripts` and `allow-same-origin` flags of the `sandbox` directive now affect worker thread creation.
 
-3. Inline scripts and styles: CSP 2 allows for the execution of inline scripts and style blocks by providing nonces (single-use base-64 codes) and hashes (generated via sha256, sha384 or sha512 algorithm) as a whitelisting mechanism.
+3. Inline scripts and styles: CSP 2 allows for the execution of inline scripts and style blocks by providing nonces (single-use base-64 codes) and hashes (generated via sha256, sha384 or sha512 algorithms) as a whitelisting mechanism.
 
-4. CSP violation reporting: A new event, SecurityPolicyViolationEvent is now fired upon CSP violations. The earlier mechanism for CSP reporting, `report-uri`, continues to be supported. Several new fields have been added to the violation reports common to both, including `effectiveDirective` (the policy that was violated), `statusCode` (the HTTP response code), `sourceFile` (the URL of the offending resource), `lineNumber`, and `columnNumber`.
+4. CSP violation reporting: A new event, `SecurityPolicyViolationEvent` is now fired upon CSP violations. The earlier mechanism for CSP reporting, `report-uri`, continues to be supported. Several new fields have been added to the violation reports common to both, including `effectiveDirective` (the policy that was violated), `statusCode` (the HTTP response code), `sourceFile` (the URL of the offending resource), `lineNumber`, and `columnNumber`.
 
 ## CSP Directives
 
