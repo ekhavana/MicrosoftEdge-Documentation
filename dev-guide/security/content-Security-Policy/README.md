@@ -1,4 +1,4 @@
-*# Content Security Policy
+# Content Security Policy
 
 
 As of the MM/YYYY [Windows Creators Update](), Microsoft Edge supports [Content Security Policy Level 2](http://www.w3.org/TR/CSP2/), which extends and replaces the original Content Security Policy specification.
