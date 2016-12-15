@@ -1,4 +1,4 @@
-# Content Security Policy
+*# Content Security Policy
 
 
 As of the MM/YYYY [Windows Creators Update](), Microsoft Edge supports [Content Security Policy Level 2](http://www.w3.org/TR/CSP2/), which extends and replaces the original Content Security Policy specification.
@@ -12,7 +12,7 @@ Sites already using CSP 1 should continue to work with Microsoft Edge support fo
 
 2. Workers support: Background worker scripts are governed by their own policy, separate from the policy of the document loading them. As with host documents, you can set the CSP for a worker in the response header. Also new in CSP 2 is that the `allow-scripts` and `allow-same-origin` flags of the `sandbox` directive now affect worker thread creation.
 
-3. Inline scripts and styles: CSP 2 allows for the execution of inline scripts and style blocks by providing nonces (single-use base-64 codes) and hashes (generated via sha256, sha384 or sha512 algorithms) as a whitelisting mechanism.
+3. Inline scripts and styles: CSP 2 allows for the execution of inline scripts and style blocks by providing nonces (single-use base-64 codes) and hashes (generated via *sha256*, *sha384* or *sha512* algorithms) as a whitelisting mechanism.
 
 4. CSP violation reporting: A new event, `SecurityPolicyViolationEvent` is now fired upon CSP violations. The earlier mechanism for CSP reporting, `report-uri`, continues to be supported. Several new fields have been added to the violation reports common to both, including `effectiveDirective` (the policy that was violated), `statusCode` (the HTTP response code), `sourceFile` (the URL of the offending resource), `lineNumber`, and `columnNumber`.
 
