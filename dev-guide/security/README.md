@@ -2,7 +2,7 @@
 
 ## Content Security Policy (CSP)
 
-With [Content Security Policy](./content-Security-Policy), you create an allow list of sources of trusted content in the HTTP headers, pre-approving certain servers for content loaded into a webpage and instructing the browser to only execute or render resources from those sources. This can be used to prevent malicious content from being injected into sites.
+With [Content Security Policy (CSP)](./content-Security-Policy), you create an allow list of sources of trusted content in the HTTP headers, pre-approving certain servers for content loaded into a webpage and instructing the browser to only execute or render resources from those sources to prevent cross-site scripting attacks. Microsoft Edge supports CSP 1 and 2.
 
 ## HTTP Strict Transport Security (HSTS)
 

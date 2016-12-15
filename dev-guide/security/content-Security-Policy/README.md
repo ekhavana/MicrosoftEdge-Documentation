@@ -1,35 +1,47 @@
 # Content Security Policy
 
 
-Microsoft Edge now implements Content Security Policy (CSP) 1.0. For extended details, see the [W3C Content Security Policy specification](http://www.w3.org/TR/2012/CR-CSP-20121115/).
+As of the MM/YYYY [Windows Creators Update](), Microsoft Edge supports [Content Security Policy Level 2](http://www.w3.org/TR/CSP2/), which extends and replaces the original Content Security Policy specification.
 
->note Content Security Policy 1.0 is supported in Microsoft Edge build 10240+. [Content Security Policy Level 2](http://go.microsoft.com/fwlink/p/?LinkID=524582), an evolution of the specification, is currently [under consideration](https://developer.microsoft.com/en-us/microsoft-edge/platform/status/contentsecuritypolicylevel2?filter=f3f0000bf&search=content%20security) for implementation in the Microsoft Edge browser pending the spec stabilization, foundational work, and an evaluation of community input.
+The CSP security standard enables web developers to control the resources (script, CSS, plugins, images, etc.) which a particular page can fetch or execute with the aim of preventing cross-site scripting (XSS), clickjacking, and other code injection attacks seeking to execute malicious content in the context of a trusted web page. With CSP, web developers can create an allow list of sources of trusted content in the HTTP headers, pre-approving certain servers for content loaded into a webpage and instructing the browser to only execute or render resources from those sources.
 
-The CSP security standard enables web developers to control the resources (JS, CSS, plugins, images, etc) which a particular page can fetch or execute with the aim of preventing cross-site scripting (XSS), clickjacking, and other code injection attacks seeking to execute malicious content in the context of a trusted web page. With CSP, web developers can create an allow list of sources of trusted content in the HTTP headers, pre-approving certain servers for content loaded into a webpage and instructing the browser to only execute or render resources from those sources.
+## Changes between CSP Level 1 and Level 2
+Sites already using CSP 1 should continue to work with Microsoft Edge support for CSP 2, however be aware that the  `child-src` directive has been introduced to supplant `frame-src`. CSP 2 also adds the following:
 
-For example, say you want to protect your site against Cross Site Scripting (XSS) attacks, and you're loading all your files from your own server and a 3rd party content delivery network (CDN) hosting a library you use. Using CSP, you would send a header with 'self' (your server) and the CDN as your approved list.
+1. New directives: `base-uri`, `child-src`, `form-action`, `frame-ancestors` and `plugin-types`. See table below for more details.
+
+2. Workers support: Background worker scripts are governed by their own policy, separate from the policy of the document loading them. As with host documents, you can set the CSP for a worker in the response header. Also new in CSP 2 is that the `allow-scripts` and `allow-same-origin` flags of the `sandbox` directive now affect worker thread creation.
+
+3. Inline scripts and styles: CSP 2 allows for the execution of inline scripts and style blocks by providing nonces (single-use base-64 codes) and hashes (generated via sha256, sha384 or sha512 algorithm) as a whitelisting mechanism.
+
+4. CSP violation reporting: A new event, SecurityPolicyViolationEvent is now fired upon CSP violations. The earlier mechanism for CSP reporting, `report-uri`, continues to be supported. Several new fields have been added to the violation reports common to both, including `effectiveDirective` (the policy that was violated), `statusCode` (the HTTP response code), `sourceFile` (the URL of the offending resource), `lineNumber`, and `columnNumber`.
 
 ## CSP Directives
 
-The `Content-Security-Policy` header value is made up of one or more directives (defined below), multiple directives are separated with a semicolon `;`. The directives below are based on the [Content Security Policy 1.0 W3C Candidate Recommendation](http://www.w3.org/TR/2012/CR-CSP-20121115/).
+The `Content-Security-Policy` header value is made up of one or more directives (defined below), multiple directives are separated with a semicolon `;`. The directives below are based on the [Content Security Policy Level 2](http://www.w3.org/TR/CSP2/) specification.
 
-Directive | Example Value | Description 
-:------------ | :------------- | :-------------
-default-src	|'self' cdn.foo.com	| The default-src is the default policy for loading content such as JavaScript, Images, CSS, Font's, AJAX requests, Frames, or HTML5 Media. See the [Source List Reference](#Source-List-Reference) for possible values.
-script-src | 'self' js.foo.com | Defines valid sources of JavaScript.
-style-src | 'self' css.foo.com | Defines valid sources of stylesheets.
-img-src | 'self' img.foo.com | Defines valid sources of images.
-connect-src | 'self' | Applies to XMLHttpRequest (AJAX), WebSocket or EventSource. If not allowed the browser emulates a 400 HTTP status code.
-font-src | font.foo.com | Defines valid sources of fonts.
-object-src | 'self' | Defines valid sources of plugins, eg  `<object>`, `<embed>` or `<applet>`.
-media-src | media.foo.com | Defines valid sources of audio and video, eg HTML5 `<audio>`, `<video>` elements.
-frame-src | 'self' | Defines valid sources for loading frames.
-sandbox | allow-forms allow-scripts | Enables a sandbox for the requested resource similar to the iframe sandbox attribute. The sandbox applies a same origin policy, prevents popups, plugins and script execution is blocked. You can keep the sandbox value empty to keep all restrictions in place, or add values: allow-forms allow-same-origin allow-scripts, and allow-top-navigation
-report-uri | /some-report-uri | Instructs the browser to POST a reports of policy failures to this URI. You can also append -Report-Only to the HTTP header name to instruct the browser to only send reports (does not block anything).
+Directive | Description
+:------------ | :-------------
+base-uri | Restricts which `href` values specified by the `<base>` element can be used as the document's base URL.
+child-src | Defines valid source for loading frames and workers.
+connect-src |  Applies to XMLHttpRequest (AJAX), WebSocket or EventSource. If not allowed the browser emulates a 400 HTTP status code.
+default-src	| The default-src is the default policy for loading content such as JavaScript, Images, CSS, Font's, AJAX requests, Frames, or HTML5 Media. See the [Source List Reference](#Source-List-Reference) for possible values.
+font-src | Defines valid sources of fonts.
+form-action | Restricts which `action` URL values specified by the `<form>` element can be used to process the form.
+frame-ancestors | Restricts how the document is embedded in other documents.
+frame-src | Deprecated. Defines valid sources for loading frames.
+img-src | Defines valid sources of images.
+media-src | Defines valid sources of audio and video (e.g., HTML5 `<audio>`, `<video>` elements).
+object-src | Defines valid sources of plugins (e.g.,  `<object>`, `<embed>` or `<applet>`).
+plugin-types | Defines the plugin MIME types the document can load (e.g., `application/x-shockwave-flash`) via the `<embed>`, `<object>`, and `<applet>` elements.
+report-uri | Instructs the browser to POST a reports of policy failures to this URI. You can also append -Report-Only to the HTTP header name to instruct the browser to only send reports (does not block anything).
+sandbox | Enables a sandbox for the requested resource similar to the iframe sandbox attribute. The sandbox applies a same origin policy, prevents popups, plugins and script execution is blocked. You can keep the sandbox value empty to keep all restrictions in place, or specify these values: `allow-forms`, `allow-same-origin`, `allow-scripts`, `allow-top-navigation`.
+script-src | Defines valid sources of JavaScript.
+style-src | Defines valid sources of stylesheets.
 
 ## Source List Reference
 
-All of the directives that end with `-src` support similar values known as a source list. Multiple source list values can be space separated with the exception of 'none' which should be the only value.
+All of the directives that end with `-src` and also `frame-ancestors` support values known as a "source list". Multiple source list values can be space separated with the exception of 'none' which should be the only value.
 
 Source Value | Example | Description
 :------------ | :------------- | :-------------
@@ -84,14 +96,14 @@ Resources blocked by CSP are reported through F12 tools and, optionally, as a re
 
 ## Related articles
 
-[Microsoft Edge: Building a safer browser](https://blogs.windows.com/msedgedev/2015/05/11/microsoft-edge-building-a-safer-browser/)
+[Keeping your Hosted Web App secure](https://blogs.windows.com/buildingapps/2016/03/22/keeping-your-hosted-web-app-secure/#z71oiBKiXOYXVQXp.97)
 
-[Living on the edge – our next step in helping the web just work](https://blogs.windows.com/msedgedev/2014/11/11/living-on-the-edge-our-next-step-in-helping-the-web-just-work/)
+[Microsoft Edge: Building a safer browser](https://blogs.windows.com/msedgedev/2015/05/11/microsoft-edge-building-a-safer-browser/)
 
 
 ## Specification
-[Content Security Policy 1.0](http://www.w3.org/TR/2012/CR-CSP-20121115/) *Currently implemented on Microsoft Edge.
+[Content Security Policy 1.0](http://www.w3.org/TR/2012/CR-CSP-20121115/)
 
 [Content Security Policy Level 2](http://www.w3.org/TR/CSP2/)
 
-[Content Security Policy Level 3](http://w3c.github.io/webappsec-csp/)
+[Content Security Policy Level 3](http://w3c.github.io/webappsec-csp/) *Not yet implemented in Microsoft Edge
